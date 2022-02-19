@@ -27,7 +27,7 @@ listingRouter.post('/', async (request, response) =>
   if (token == null)
     return response.status(401).json({ error: 'Token missing or invalid' })
 
-  const decodedToken = jwt.verify(token, process.env.TOKEN)
+  const decodedToken = jwt.verify(token, process.env.SECRET_KEY)
 
   if (!token || !decodedToken.id)
     return response.status(401).json({ error: 'Token missing or invalid' })
@@ -75,7 +75,7 @@ listingRouter.delete('/:id', async (request, response) =>
     if (!listing)
       return response.status(400).json({ error: `No listings found with the id: ${id}`})
 
-    const decodedToken = jwt.verify(token, process.env.TOKEN)
+    const decodedToken = jwt.verify(token, process.env.SECRET_KEY)
     if (!decodedToken.id)
       return response.status(401).json({ error: 'Missing or invalid token' })
 
