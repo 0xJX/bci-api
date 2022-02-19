@@ -47,3 +47,21 @@ describe('POST listings', () =>
       });
     });
 });
+
+describe('/POST create user', () => 
+{
+    it('Test create user posting.', (done) => 
+    {
+        let user = {
+            "username": "MochaTest",
+            "name": "First Last",
+            "phonenumber": "123456789",
+            "email": "mocha@test.com",
+            "password": "mochatest"
+        }
+        chai.request(server).post('/api/users').send(user).end((err, res) => 
+        {
+          done();
+        });
+    });
+})

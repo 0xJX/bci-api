@@ -1,25 +1,12 @@
 const mongoose = require('mongoose')
 
-const userSchema = mongoose.Schema({
-  username: {
-    type: String,
-    unique: true
-  },
-  name: {
-    type: String,
-    minlength: 4,
-    require: true
-  },
-  phonenumber: {
-      type: String,
-      minlength: 4,
-      require: true
-  },
-  email: {
-      type: String,
-      require: true
-  },
-  passwordHash: String,
+const userSchema = mongoose.Schema(
+{
+  username: { type: String, minlength: 2, unique: true },
+  name: { type: String, minlength: 4, require: true },
+  phonenumber: { type: String, minlength: 4, require: true },
+  email: { type: String, require: true },
+  passwordHash: {type: String },
   listings: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -28,8 +15,10 @@ const userSchema = mongoose.Schema({
   ],
 })
 
-userSchema.set('toJSON', {
-  transform: (_document, returnedObject) => {
+userSchema.set('toJSON', 
+{
+  transform: (_document, returnedObject) => 
+  {
     returnedObject.id = returnedObject._id.toString()
     delete returnedObject._id
     delete returnedObject.__v

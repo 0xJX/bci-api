@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken')
 const GetToken = request => 
 {
   const auth = request.get('authorization')
-
   if (auth && auth.toLowerCase().startsWith('bearer '))
     return auth.substring(7)
 
@@ -34,7 +33,8 @@ listingRouter.post('/', async (request, response) =>
 
   const user = await User.findById(decodedToken.id)
 
-  const listing = new Listing({
+  const listing = new Listing(
+  {
     title: body.title,
     description: body.description,
     category: body.category,
@@ -50,6 +50,31 @@ listingRouter.post('/', async (request, response) =>
   user.listings = user.listings.concat(savedListing._id)
   await user.save()
   response.json(savedListing.toJSON())
+})
+
+listingRouter.get('/location/:location', async (request, response) => 
+{
+  const listing = await Listing.find({location: request.params.location}).populate('userReference', ['fullname', 'phonenumber', 'email'])
+  if (listing)
+    response.json(listing.toJSON())
+  else
+    response.status(404).end()
+})
+
+listingRouter.get('/category/:category', async (request, response) => {
+  const listing = await Listing.find({category: req.params.category}).populate('userReference', ['fullname', 'phonenumber', 'email'])
+  if (listing)
+    response.json(listing.toJSON())
+else
+    response.status(404).end()
+})
+
+listingRouter.get('/date/:date', async (request, response) => {
+  const listing = await Listing.find({dateOfPost: {$regex: "[0-9]{4}-[0-9]{2}-[0-9]{2}","$options": "i"} }).populate('userReference', ['fullname', 'phonenumber', 'email'])
+  if (listing)
+    response.json(listing.toJSON())
+  else
+    response.status(404).end()
 })
 
 listingRouter.get('/:id', async (request, response) => 
