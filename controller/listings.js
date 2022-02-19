@@ -2,15 +2,7 @@ const listingRouter = require('express').Router()
 const Listing = require('../model/listing')
 const User = require('../model/user')
 const jwt = require('jsonwebtoken')
-
-const GetToken = request => 
-{
-  const auth = request.get('authorization')
-  if (auth && auth.toLowerCase().startsWith('bearer '))
-    return auth.substring(7)
-
-  return null
-}
+const tokenHelper = require("./token");
 
 listingRouter.get('/', async (_request, response) => 
 {
@@ -21,7 +13,7 @@ listingRouter.get('/', async (_request, response) =>
 listingRouter.post('/', async (request, response) => 
 {
   const body = request.body
-  const token = GetToken(request)
+  const token = tokenHelper.GetToken(request)
 
   if (token == null)
     return response.status(401).json({ error: 'Token missing or invalid' })
@@ -92,7 +84,7 @@ listingRouter.delete('/:id', async (request, response) =>
   {
     const id = request.params.id
     const listing = await Listing.findById(id)
-    const token = GetToken(request)
+    const token = tokenHelper.GetToken(request)
 
     if (token == null)
       return response.status(401).json({ error: 'Token missing or invalid' })

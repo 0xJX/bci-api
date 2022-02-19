@@ -1,15 +1,7 @@
 const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../model/user')
-
-const GetToken = request => 
-{
-  const auth = request.get('authorization')
-  if (auth && auth.toLowerCase().startsWith('bearer '))
-    return auth.substring(7)
-
-  return null
-}
+const tokenHelper = require("./token");
 
 usersRouter.post('/', async (request, response, next) => 
 {
@@ -48,7 +40,7 @@ usersRouter.delete('/:id', async (request, response) =>
   {
     const id = request.params.id
     const user = await User.findById(id)
-    const token = GetToken(request)
+    const token = tokenHelper.GetToken(request)
 
     if (token == null)
       return response.status(401).json({ error: 'Token missing or invalid' })
