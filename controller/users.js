@@ -2,6 +2,15 @@ const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../model/user')
 
+const GetToken = request => 
+{
+  const auth = request.get('authorization')
+  if (auth && auth.toLowerCase().startsWith('bearer '))
+    return auth.substring(7)
+
+  return null
+}
+
 usersRouter.post('/', async (request, response, next) => 
 {
   try 
@@ -33,15 +42,35 @@ usersRouter.get('/', async (_request, response) =>
   response.json(users.map(user => user.toJSON()))
 })
 
-usersRouter.delete('/del/:id', async (request, response)=> 
+usersRouter.delete('/:id', async (request, response) => 
 {
-  User.findByIdAndRemove(request.params.id).exec().then(doc =>  
+  try 
   {
-    if (!doc) 
-      return response.status(404).end();
+    const id = request.params.id
+    const user = await User.findById(id)
+    const token = GetToken(request)
 
-    return response.status(204).end();
-  })
-});
+    if (token == null)
+      return response.status(401).json({ error: 'Token missing or invalid' })
+
+    if (!user)
+      return response.status(400).json({ error: `No users found with the id: ${id}`})
+
+    const decodedToken = jwt.verify(token, process.env.SECRET_KEY)
+    if (!decodedToken.id)
+      return response.status(401).json({ error: 'Missing or invalid token' })
+
+    //if (user.toString() !== decodedToken.id)
+      //return response.status(401).json({ error: 'Not authorized' })
+
+    const deletedUser = await user.findByIdAndRemove(id)
+    response.json(deletedUser.toJSON())
+  } 
+  catch (exception) 
+  {
+    return response.status(400).json({ error: 'Bad request' })
+  }
+})
+
 
 module.exports = usersRouter
