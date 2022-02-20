@@ -1,0 +1,524 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Bci-api documentation",
+    "version": "1.0",
+    "description": "OpenAPI",
+    "summary": "Documentation for BCI-Api"
+  },
+  "servers": [
+    {
+      "url": "bciapi.herokuapp.com:80"
+    }
+  ],
+  "paths": {
+    "/api/login/": {
+      "post": {
+        "summary": "Login",
+        "operationId": "post-api-login",
+        "responses": {
+          "200": {
+            "description": "200: OK"
+          }
+        },
+        "description": "User login; This will return required JSON Web Token, username and name.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": " docTester"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "superSecretPassword!"
+                  }
+                },
+                "required": [
+                  "username",
+                  "password"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/": {
+      "parameters": [],
+      "get": {
+        "summary": "Get all users",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "200: OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "Get User Alice Smith": {
+                    "value": {
+                      "id": 142,
+                      "firstName": "Alice",
+                      "lastName": "Smith",
+                      "email": "alice.smith@gmail.com",
+                      "dateOfBirth": "1997-10-31",
+                      "emailVerified": true,
+                      "signUpDate": "2019-08-24"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-users",
+        "description": "Retrieve all users from the database."
+      },
+      "post": {
+        "summary": "Register user",
+        "operationId": "post-api-users",
+        "responses": {
+          "200": {
+            "description": "200: OK"
+          }
+        },
+        "description": "Register new user to database.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "minLength": 2,
+                    "description": "Unique username",
+                    "example": "docTester"
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 4,
+                    "description": "Full name",
+                    "example": "John Example"
+                  },
+                  "phonenumber": {
+                    "type": "string",
+                    "minLength": 4,
+                    "example": "0401234567"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "fakeTestEmail@12345mail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "In regular format",
+                    "example": "superSecretPassword!"
+                  }
+                },
+                "required": [
+                  "name",
+                  "phonenumber",
+                  "email"
+                ]
+              },
+              "examples": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "User ID"
+        }
+      ],
+      "delete": {
+        "summary": "",
+        "operationId": "delete-api-users-id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request / No users found with the id."
+          },
+          "401": {
+            "description": "Token missing or invalid"
+          }
+        },
+        "description": "Delete user with given ID. Requires valid JSON Web Token."
+      }
+    },
+    "/api/listings/": {
+      "get": {
+        "summary": "Get listings",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "200: OK"
+          }
+        },
+        "operationId": "get-api-listings",
+        "description": "Get all posted listings from the database."
+      },
+      "post": {
+        "summary": "Post listing",
+        "operationId": "post-api-listings",
+        "responses": {
+          "200": {
+            "description": "200: OK"
+          }
+        },
+        "description": "Post a new listing.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "default": "Bearer <token>",
+              "example": "Returned token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imp4IiwiaWQiOiI2MjExNzYzZjI3ZjIyOGFlOTc1ZDk5ZWIiLCJpYXQiOjE2NDUzODYyNzF9.Hqu3mY412M5Ti8AxJMx0SDGFhE4INHkyHEy_OS99A9o"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "description": "JSON Web Token from login."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "x-examples": {
+                  "example-1": {
+                    "title": "Gucci shoes",
+                    "description": "Used shoes.",
+                    "category": "Clothes",
+                    "location": "Finland",
+                    "images": [
+                      null
+                    ],
+                    "price": 200,
+                    "deliverytype": "shipping",
+                    "user": {}
+                  }
+                },
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "category": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "location": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "imgUrl": {
+                          "type": "string",
+                          "example": "https://i.imgur.com/0gjgpWV.png"
+                        }
+                      }
+                    }
+                  },
+                  "price": {
+                    "type": "number"
+                  },
+                  "deliverytype": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "user": {
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "title",
+                  "description",
+                  "category",
+                  "location",
+                  "images",
+                  "price",
+                  "deliverytype",
+                  "user"
+                ]
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "title": "Gucci shoes",
+                    "description": "Used shoes.",
+                    "category": "Clothes",
+                    "location": "Finland",
+                    "images": [
+                      null
+                    ],
+                    "price": 200,
+                    "deliverytype": "shipping",
+                    "user": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "/api/listings/{id}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "Listing id"
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {},
+        "operationId": "get-api-listings-id",
+        "description": "Get listing with given ID parameter."
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "delete-api-listings-id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "No listings found with the id"
+          },
+          "401": {
+            "description": "Not authorized / Token missing or invalid"
+          }
+        },
+        "description": "Delete listing with given ID parameter."
+      }
+    },
+    "/api/listings/date/{date}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string",
+            "example": "2022-02-20"
+          },
+          "name": "date",
+          "in": "path",
+          "required": true,
+          "description": "YYYY-MM-DD format"
+        }
+      ],
+      "get": {
+        "summary": "Get listings by date",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "200: OK"
+          }
+        },
+        "operationId": "get-api-listings-by-date",
+        "description": "Get all the listing with the given \"date\" parameter in YYYY-MM-DD format.",
+        "parameters": []
+      }
+    },
+    "/api/listings/category/{category}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string",
+            "example": "Clothes"
+          },
+          "name": "category",
+          "in": "path",
+          "required": true,
+          "description": "Enter category string."
+        }
+      ],
+      "get": {
+        "summary": "Get listings by category",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "200: OK"
+          }
+        },
+        "operationId": "get-api-listings-by-category",
+        "description": "Get all the listing with the given \"category\" parameter in regular string format."
+      }
+    },
+    "/api/listings/location/{location}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string",
+            "example": "Finland"
+          },
+          "name": "location",
+          "in": "path",
+          "required": true,
+          "description": "Enter location in string format"
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "200: OK"
+          }
+        },
+        "operationId": "get-api-listings-by-location"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "title": "User",
+        "type": "object",
+        "description": "JSON Posting.",
+        "examples": [
+          {
+            "username": "Alice",
+            "name": "John Tester",
+            "phonenumber": "0401234567",
+            "email": "test@fakeEmail.com",
+            "password": "test"
+          }
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "minLength": 2,
+            "example": "docTester"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 4,
+            "example": "John Tester"
+          },
+          "phonenumber": {
+            "type": "string",
+            "minLength": 4,
+            "example": "0401234567"
+          },
+          "email": {
+            "type": "string",
+            "example": "test@fakeEmail.com",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "example": "test"
+          }
+        },
+        "required": [
+          "username",
+          "name",
+          "phonenumber",
+          "email",
+          "password"
+        ]
+      },
+      "Listing": {
+        "description": "",
+        "type": "object",
+        "x-examples": {
+          "example-1": {
+            "title": "Gucci shoes",
+            "description": "Used shoes.",
+            "category": "Clothes",
+            "location": "Finland",
+            "images": [
+              null
+            ],
+            "price": 200,
+            "deliverytype": "shipping",
+            "user": {}
+          }
+        },
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "type": "string",
+            "minLength": 1
+          },
+          "location": {
+            "type": "string",
+            "minLength": 1
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "imgUrl": {
+                  "type": "string",
+                  "example": "https://i.imgur.com/0gjgpWV.png"
+                }
+              }
+            }
+          },
+          "price": {
+            "type": "number"
+          },
+          "deliverytype": {
+            "type": "string",
+            "minLength": 1
+          },
+          "user": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "title",
+          "description",
+          "category",
+          "location",
+          "images",
+          "price",
+          "deliverytype",
+          "user"
+        ]
+      }
+    }
+  }
+}
