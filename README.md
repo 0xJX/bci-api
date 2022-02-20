@@ -8,6 +8,28 @@ Building Cloud Integration Exercise - Advanced Studies of Software Development S
 - Mocha + Chai testing
 - MongoDB Database + Hosting
 - Heroku API Hosting
+- Stoplight generated JSON documentation
 
-## API URL
+## Local testing environment setup
+- Clone the repository
+- npm install all the required node modules.
+
+Add environment file (.env) to root repo folder with your MongoDB url and keys in this format
+
+    MONGO_URI = mongodb+srv://yourURLhere
+    SECRET_KEY = 32characterslongstringhere
+    PORT = 80
+
+## Running the local API
+Run the server with this command:
+
+    node index.js
+Run the mocha tests with this command:
+
+    npm test
+## Hosted API URL
     bciapi.herokuapp.com
+
+## Hosted documentation
+    https://bciapi.stoplight.io/docs/bci-api/YXBpOjIzMzE3MTA-bci-api-documentation
+[Open in web browser](https://bciapi.stoplight.io/docs/bci-api/YXBpOjIzMzE3MTA-bci-api-documentation)
