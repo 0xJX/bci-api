@@ -4,6 +4,8 @@
 [![Web](https://img.shields.io/badge/platform-Web-0078d7.svg?style=plastic)](https://en.wikipedia.org/wiki/Web_platform) 
 
 Building Cloud Integration Exercise - Advanced Studies of Software Development Spring 2022
+
+Webstore backend.
 - OpenAPI
 - Mocha + Chai testing
 - MongoDB Database + Hosting
