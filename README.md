@@ -14,6 +14,12 @@ Building Cloud Integration Exercise - Advanced Studies of Software Development S
 - Clone the repository
 - npm install all the required node modules.
 
+Add environment file (.env) to root repo folder with your MongoDB url and keys in this format
+
+    MONGO_URI = mongodb+srv://yourURLhere
+    SECRET_KEY = 32characterslongstringhere
+    PORT = 80
+
 ## Running the local API
 Run the server with this command:
 
