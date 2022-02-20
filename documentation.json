@@ -168,7 +168,7 @@
         }
       ],
       "delete": {
-        "summary": "",
+        "summary": "Delete user with ID",
         "operationId": "delete-api-users-id",
         "responses": {
           "200": {
@@ -324,14 +324,14 @@
         }
       ],
       "get": {
-        "summary": "Your GET endpoint",
+        "summary": "Get listing with ID",
         "tags": [],
         "responses": {},
         "operationId": "get-api-listings-id",
         "description": "Get listing with given ID parameter."
       },
       "delete": {
-        "summary": "",
+        "summary": "Delete listing with ID",
         "operationId": "delete-api-listings-id",
         "responses": {
           "200": {
@@ -412,7 +412,7 @@
         }
       ],
       "get": {
-        "summary": "Your GET endpoint",
+        "summary": "Get listings by location",
         "tags": [],
         "responses": {
           "200": {
