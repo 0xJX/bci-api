@@ -19,6 +19,9 @@
         "responses": {
           "200": {
             "description": "200: OK"
+          },
+          "401": {
+            "description": "401: Invalid username or password"
           }
         },
         "description": "User login; This will return required JSON Web Token, username and name.",
@@ -41,6 +44,14 @@
                   "username",
                   "password"
                 ]
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "username": "docTester",
+                    "password": "superSecretPassword!"
+                  }
+                }
               }
             }
           }
@@ -128,7 +139,17 @@
                   "email"
                 ]
               },
-              "examples": {}
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "username": "docTester",
+                    "name": "John Example",
+                    "phonenumber": "0401234567",
+                    "email": "fakeTestEmail@12345mail.com",
+                    "password": "superSecretPassword!"
+                  }
+                }
+              }
             }
           }
         }
@@ -151,13 +172,13 @@
         "operationId": "delete-api-users-id",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "200: OK"
           },
           "400": {
-            "description": "Bad Request / No users found with the id."
+            "description": "400: Bad Request / No users found with the id."
           },
           "401": {
-            "description": "Token missing or invalid"
+            "description": "401: Token missing or invalid"
           }
         },
         "description": "Delete user with given ID. Requires valid JSON Web Token."
