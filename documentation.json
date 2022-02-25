@@ -379,8 +379,7 @@
                     "description": "Used shoes.",
                     "category": "Clothes",
                     "location": "Finland",
-                    "images": [
-                    ],
+                    "images": [],
                     "price": 200,
                     "deliverytype": "shipping",
                     "user": {}
@@ -469,20 +468,6 @@
       "Listing": {
         "description": "",
         "type": "object",
-        "x-examples": {
-          "example-1": {
-            "title": "Gucci shoes",
-            "description": "Used shoes.",
-            "category": "Clothes",
-            "location": "Finland",
-            "images": [
-              null
-            ],
-            "price": 200,
-            "deliverytype": "shipping",
-            "user": {}
-          }
-        },
         "properties": {
           "title": {
             "type": "string",
@@ -503,13 +488,8 @@
           "images": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "imgUrl": {
-                  "type": "string",
-                  "example": "https://i.imgur.com/0gjgpWV.png"
-                }
-              }
+              "required": [],
+              "properties": {}
             }
           },
           "price": {
@@ -520,7 +500,9 @@
             "minLength": 1
           },
           "user": {
-            "type": "object"
+            "type": "object",
+            "properties": {},
+            "required": []
           }
         },
         "required": [
@@ -532,7 +514,21 @@
           "price",
           "deliverytype",
           "user"
-        ]
+        ],
+        "x-examples": {
+          "example-1": {
+            "title": "string",
+            "description": "string",
+            "category": "string",
+            "location": "string",
+            "images": [
+              "https://i.imgur.com/0gjgpWV.png"
+            ],
+            "price": 0,
+            "deliverytype": "string",
+            "user": {}
+          }
+        }
       }
     }
   }
