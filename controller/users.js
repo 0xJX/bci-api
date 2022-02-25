@@ -31,7 +31,10 @@ usersRouter.post('/', async (request, response, next) =>
 usersRouter.get('/', async (_request, response) => 
 {
   const users = await User.find({}).populate('listings')
-  response.json(users.map(user => user.toJSON()))
+  if (users)
+    response.json(users.map(user => user.toJSON()))
+  else
+    response.status(404).end()
 })
 
 usersRouter.delete('/', async (request, response) => 
