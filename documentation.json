@@ -86,10 +86,14 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "operationId": "get-users",
-        "description": "Retrieve all users from the database."
+        "description": "Retrieve all users from the database.",
+        "parameters": []
       },
       "post": {
         "summary": "Register user",
@@ -153,6 +157,31 @@
             }
           }
         }
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "delete-api-users",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "id",
+            "description": "Delete user with given userID."
+          }
+        ]
       }
     },
     "/api/users/{id}": {
@@ -166,23 +195,7 @@
           "required": true,
           "description": "User ID"
         }
-      ],
-      "delete": {
-        "summary": "Delete user with ID",
-        "operationId": "delete-api-users-id",
-        "responses": {
-          "200": {
-            "description": "200: OK"
-          },
-          "400": {
-            "description": "400: Bad Request / No users found with the id."
-          },
-          "401": {
-            "description": "401: Token missing or invalid"
-          }
-        },
-        "description": "Delete user with given ID. Requires valid JSON Web Token."
-      }
+      ]
     },
     "/api/listings/": {
       "get": {
@@ -191,10 +204,47 @@
         "responses": {
           "200": {
             "description": "200: OK"
+          },
+          "404": {
+            "description": "404: Not Found"
           }
         },
         "operationId": "get-api-listings",
-        "description": "Get all posted listings from the database."
+        "description": "Get all posted listings from the database.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "id",
+            "description": "Get listing with given id."
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "category",
+            "description": "Get listings with given category."
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "location",
+            "description": "Get listings with given location."
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "date",
+            "description": "Get listings with given date."
+          }
+        ]
       },
       "post": {
         "summary": "Post listing",
@@ -309,117 +359,31 @@
           }
         }
       },
-      "parameters": []
-    },
-    "/api/listings/{id}": {
-      "parameters": [
-        {
-          "schema": {
-            "type": "string"
-          },
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "description": "Listing id"
-        }
-      ],
-      "get": {
-        "summary": "Get listing with ID",
-        "tags": [],
-        "responses": {},
-        "operationId": "get-api-listings-id",
-        "description": "Get listing with given ID parameter."
-      },
+      "parameters": [],
       "delete": {
-        "summary": "Delete listing with ID",
-        "operationId": "delete-api-listings-id",
+        "summary": "",
+        "operationId": "delete-api-listings",
         "responses": {
           "200": {
             "description": "OK"
           },
           "400": {
-            "description": "No listings found with the id"
+            "description": "Bad Request"
           },
           "401": {
-            "description": "Not authorized / Token missing or invalid"
+            "description": "Unauthorized"
           }
         },
-        "description": "Delete listing with given ID parameter."
-      }
-    },
-    "/api/listings/date/{date}": {
-      "parameters": [
-        {
-          "schema": {
-            "type": "string",
-            "example": "2022-02-20"
-          },
-          "name": "date",
-          "in": "path",
-          "required": true,
-          "description": "YYYY-MM-DD format"
-        }
-      ],
-      "get": {
-        "summary": "Get listings by date",
-        "tags": [],
-        "responses": {
-          "200": {
-            "description": "200: OK"
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "id",
+            "description": "Delete listings with given id."
           }
-        },
-        "operationId": "get-api-listings-by-date",
-        "description": "Get all the listing with the given \"date\" parameter in YYYY-MM-DD format.",
-        "parameters": []
-      }
-    },
-    "/api/listings/category/{category}": {
-      "parameters": [
-        {
-          "schema": {
-            "type": "string",
-            "example": "Clothes"
-          },
-          "name": "category",
-          "in": "path",
-          "required": true,
-          "description": "Enter category string."
-        }
-      ],
-      "get": {
-        "summary": "Get listings by category",
-        "tags": [],
-        "responses": {
-          "200": {
-            "description": "200: OK"
-          }
-        },
-        "operationId": "get-api-listings-by-category",
-        "description": "Get all the listing with the given \"category\" parameter in regular string format."
-      }
-    },
-    "/api/listings/location/{location}": {
-      "parameters": [
-        {
-          "schema": {
-            "type": "string",
-            "example": "Finland"
-          },
-          "name": "location",
-          "in": "path",
-          "required": true,
-          "description": "Enter location in string format"
-        }
-      ],
-      "get": {
-        "summary": "Get listings by location",
-        "tags": [],
-        "responses": {
-          "200": {
-            "description": "200: OK"
-          }
-        },
-        "operationId": "get-api-listings-by-location"
+        ]
       }
     }
   },
