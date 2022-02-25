@@ -34,4 +34,5 @@ Run the mocha tests with this command:
 
 ## Hosted documentation
     https://bciapi.stoplight.io/docs/bci-api/YXBpOjIzMzE3MTA-bci-api-documentation
+Please note, the API calls will not work from the stoplight due to CORS issues, you can use postman to manually test the hosted api url.
 [Open in web browser](https://bciapi.stoplight.io/docs/bci-api/YXBpOjIzMzE3MTA-bci-api-documentation)
