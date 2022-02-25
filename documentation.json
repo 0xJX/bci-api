@@ -73,15 +73,60 @@
                   "$ref": "#/components/schemas/User"
                 },
                 "examples": {
-                  "Get User Alice Smith": {
+                  "Get user example": {
                     "value": {
-                      "id": 142,
-                      "firstName": "Alice",
-                      "lastName": "Smith",
-                      "email": "alice.smith@gmail.com",
-                      "dateOfBirth": "1997-10-31",
-                      "emailVerified": true,
-                      "signUpDate": "2019-08-24"
+                      "username": "docTester",
+                      "name": "John Tester",
+                      "email": "test@fakeEmail.com",
+                      "listings": [],
+                      "id": "ID_HERE"
+                    }
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "email": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "listings": {
+                      "type": "array",
+                      "items": {
+                        "required": [],
+                        "properties": {}
+                      }
+                    },
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "username",
+                    "name",
+                    "email",
+                    "listings",
+                    "id"
+                  ],
+                  "x-examples": {
+                    "example-1": {
+                      "username": "docTester",
+                      "name": "John Tester",
+                      "email": "test@fakeEmail.com",
+                      "listings": [],
+                      "id": "ID_HERE"
                     }
                   }
                 }
@@ -335,7 +380,6 @@
                     "category": "Clothes",
                     "location": "Finland",
                     "images": [
-                      null
                     ],
                     "price": 200,
                     "deliverytype": "shipping",
@@ -419,9 +463,7 @@
         "required": [
           "username",
           "name",
-          "phonenumber",
-          "email",
-          "password"
+          "email"
         ]
       },
       "Listing": {
