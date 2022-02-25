@@ -1,54 +1,16 @@
 var chai = require('chai');
+const expect = chai.expect;
+
 chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 module.exports = require('../');
 let server = `http://localhost:${process.env.PORT}`
+var storedToken = 'null';
+var storedDate = 'null';
+var listingID = 'null';
+//var storedUserID = 'null';
 
-describe('GET users', () => 
-{
-    it('It should return the users array.', (done) => 
-    {
-      chai.request(server).get('/api/users').end((err, res) => 
-      {
-        chai.expect(res).to.have.property('body');
-        chai.expect(res.body[0]).to.have.property('username');
-        chai.expect(res.body[0]).to.have.property('name');
-        chai.expect(res.body[0]).to.have.property('phonenumber');
-        chai.expect(res.body[0]).to.have.property('email');
-        chai.expect(res.body[0]).to.have.property('listings');
-        chai.expect(res.body[0]).to.have.property('id');
-        done();
-      });
-    });
-});
-
-/* This could be modified to check the returned token, but this is a public repo 
-   so we avoid commiting any userdetail related tests.*/
-describe('POST login', () => 
-{
-    it('It should try to login without credentials and return error status.', (done) => 
-    {
-      chai.request(server).post('/api/login').end((err, res) => 
-      {
-        chai.expect(res).to.have.property('error'); //.equals("Invalid username or password")
-        done();
-      });
-    });
-});
-
-describe('POST listings', () => 
-{
-    it('It should try to post listing without the token and respond with token missing.', (done) => 
-    {
-      chai.request(server).post('/api/listings').end((err, res) => 
-      {
-        chai.expect(res).to.have.property('error');
-        done();
-      });
-    });
-});
-
-describe('/POST create user', () => 
+describe('POST user', () => 
 {
     it('Test create user posting.', (done) => 
     {
@@ -61,7 +23,202 @@ describe('/POST create user', () =>
         }
         chai.request(server).post('/api/users').send(user).end((err, res) => 
         {
+          expect(err).to.be.null;
           done();
         });
     });
 })
+
+describe('GET users', () => 
+{
+    it('It should return the users array.', (done) => 
+    {
+      chai.request(server).get('/api/users').end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.have.property('body');
+        expect(res.body[0]).to.have.property('username');
+        expect(res.body[0]).to.have.property('name');
+        expect(res.body[0]).to.have.property('phonenumber');
+        expect(res.body[0]).to.have.property('email');
+        expect(res.body[0]).to.have.property('listings');
+        expect(res.body[0]).to.have.property('id');
+        done();
+      });
+    });
+});
+
+describe('POST login', () => 
+{
+    it('It should try to login and return 200 status.', (done) => 
+    {
+      let user = {
+        "username": "MochaTest",
+        "password": "mochatest"
+      }
+      chai.request(server).post('/api/login')
+      .send(user)
+      .end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.have.status(200);
+        expect(res.body).to.have.property('token');
+        storedToken = res.body.token;
+        done();
+      });
+    });
+});
+
+describe('POST listings', () => 
+{
+    let listing = {
+      "title": "Test",
+      "description": "Test1",
+      "category": "Test2CategoryMOCHA",
+      "location": "Test3",
+      "images": [ "testurl" ],
+      "price": 200,
+      "deliverytype": "shipping",
+    }
+    it('It should try to post listing with stored token and succeed.', (done) => 
+    {
+      chai.request(server).post('/api/listings')
+      .auth(storedToken, { type: 'bearer' })
+      .send(listing)
+      .end((err, res) => 
+      {
+        expect(storedToken).not.to.be.null;
+        expect(err).to.be.null;
+        expect(res).to.not.have.status(401);
+        done();
+      });
+    });
+});
+
+describe('GET listings', () => 
+{
+    it('It should return the listings array.', (done) => 
+    {
+      chai.request(server).get('/api/listings').end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.have.property('body');
+        expect(res.body[0]).to.have.property('user');
+        done();
+      });
+    });
+});
+
+
+describe('GET listings by category', () => 
+{
+    it('It should return the listings array with selected category.', (done) => 
+    {
+      chai.request(server).get('/api/listings?category=Test2CategoryMOCHA')
+      .end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.have.property('body');
+        expect(res.body[0]).to.have.property('user');
+        done();
+      });
+    });
+});
+
+describe('GET listings by location', () => 
+{
+    it('It should return the listings array with selected category.', (done) => 
+    {
+      chai.request(server).get('/api/listings?location=Test3')
+      .end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.have.property('body');
+        expect(res.body[0]).to.have.property('user');
+        expect(res.body[0]).to.have.property('date');
+        storedDate = res.body[0].date;
+        done();
+      });
+    });
+});
+
+describe('GET listings by date', () => 
+{
+    it('It should return the listings array with selected category.', (done) => 
+    {
+      chai.request(server).get('/api/listings?date=' + storedDate)
+      .end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.have.property('body');
+        expect(res.body[0]).to.have.property('user');
+        done();
+      });
+    });
+});
+
+describe('GET listings by category, location and date', () => 
+{
+    it('It should return the listings array with selected category.', (done) => 
+    {
+      chai.request(server).get('/api/listings?category=Test2CategoryMOCHA&location=Test3&date=' + storedDate)
+      .end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.have.property('body');
+        expect(res.body[0]).to.have.property('user');
+        expect(res.body[0]).to.have.property('id');
+        listingID = res.body[0].id;
+        done();
+      });
+    });
+});
+
+describe('GET listings by id', () => 
+{
+    it('It should return the listings array with selected id.', (done) => 
+    {
+      chai.request(server).get('/api/listings?id=' + listingID)
+      .end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.have.property('body');
+        expect(res.body[0]).to.have.property('user');
+        expect(res.body[0]).to.have.property('id');
+        done();
+      });
+    });
+});
+
+describe('DELETE listings by id', () => 
+{
+    it('It should delete the previous tested listing.', (done) => 
+    {
+      chai.request(server).delete('/api/listings?id=' + listingID)
+      .auth(storedToken, { type: 'bearer' })
+      .end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.not.have.status(400);
+        expect(res).to.not.have.status(401);
+        done();
+      });
+    });
+});
+
+/* Gotta find a way to store the user ID.
+describe('DELETE users by id', () => 
+{
+    it('It should delete the previous listings owner.', (done) => 
+    {
+      chai.request(server).delete('/api/users?id=' + storedUserID)
+      .auth(storedToken, { type: 'bearer' })
+      .end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.not.have.status(400);
+        expect(res).to.not.have.status(401);
+        done();
+      });
+    });
+});*/

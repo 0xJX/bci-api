@@ -9,7 +9,7 @@ const listingSchema = new mongoose.Schema(
     images: [],
     price: { type: Number, require: true },
     date: { type: Date },
-    deliverytype: { type: String, enum: ['shipping, pickup'], require: true },
+    deliverytype: { type: String, enum: ['shipping', 'pickup'], require: true },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 })
   

@@ -31,14 +31,17 @@ usersRouter.post('/', async (request, response, next) =>
 usersRouter.get('/', async (_request, response) => 
 {
   const users = await User.find({}).populate('listings')
-  response.json(users.map(user => user.toJSON()))
+  if (users)
+    response.json(users.map(user => user.toJSON()))
+  else
+    response.status(404).end()
 })
 
-usersRouter.delete('/:id', async (request, response) => 
+usersRouter.delete('/', async (request, response) => 
 {
   try 
   {
-    const id = request.params.id
+    const id = request.query.id;
     const user = await User.findById(id)
     const token = tokenHelper.GetToken(request)
 
@@ -52,8 +55,8 @@ usersRouter.delete('/:id', async (request, response) =>
     if (!decodedToken.id)
       return response.status(401).json({ error: 'Missing or invalid token' })
 
-    //if (user.toString() !== decodedToken.id)
-      //return response.status(401).json({ error: 'Not authorized' })
+    if (user !== decodedToken.id)
+      return response.status(401).json({ error: 'Not authorized' })
 
     const deletedUser = await user.findByIdAndRemove(id)
     response.json(deletedUser.toJSON())

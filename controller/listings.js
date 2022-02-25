@@ -4,10 +4,31 @@ const User = require('../model/user')
 const jwt = require('jsonwebtoken')
 const tokenHelper = require("./token");
 
-listingRouter.get('/', async (_request, response) => 
+listingRouter.get('/', async (request, response) => 
 {
-  const listings = await Listing.find({}).populate('user', ['name', 'phonenumber', 'email'])
-  response.json(listings.map(listing => listing.toJSON()))
+  var filter = {}
+  if(request.query.category && request.query.location && request.query.date)
+    filter = {category: request.query.category, location: request.query.location, date: request.query.date}
+  else if(request.query.category && request.query.date)
+    filter = {category: request.query.category, date: request.query.date}
+  else if(request.query.location && request.query.date)
+    filter = {location: request.query.location, date: request.query.date}
+  else if(request.query.category && request.query.location)
+    filter = {category: request.query.category, location: request.query.location}
+  else if(request.query.category)
+    filter = {category: request.query.category}
+  else if(request.query.location)
+    filter = {location: request.query.location}
+  else if(request.query.date)
+    filter = {date: request.query.date}
+  else if(request.query.id)
+    filter = {id: request.query.id}
+
+  const listings = await Listing.find(filter).populate('user', ['name', 'phonenumber', 'email'])
+  if (listings)
+    response.json(listings.map(listing => listing.toJSON()))
+  else
+    response.status(404).end()
 })
 
 listingRouter.post('/', async (request, response) => 
@@ -44,45 +65,11 @@ listingRouter.post('/', async (request, response) =>
   response.json(savedListing.toJSON())
 })
 
-listingRouter.get('/location/:location', async (request, response) => 
-{
-  const listing = await Listing.find({location: request.params.location}).populate('userReference', ['fullname', 'phonenumber', 'email'])
-  if (listing)
-    response.json(listing.toJSON())
-  else
-    response.status(404).end()
-})
-
-listingRouter.get('/category/:category', async (request, response) => {
-  const listing = await Listing.find({category: req.params.category}).populate('userReference', ['fullname', 'phonenumber', 'email'])
-  if (listing)
-    response.json(listing.toJSON())
-else
-    response.status(404).end()
-})
-
-listingRouter.get('/date/:date', async (request, response) => {
-  const listing = await Listing.find({dateOfPost: {$regex: "[0-9]{4}-[0-9]{2}-[0-9]{2}","$options": "i"} }).populate('userReference', ['fullname', 'phonenumber', 'email'])
-  if (listing)
-    response.json(listing.toJSON())
-  else
-    response.status(404).end()
-})
-
-listingRouter.get('/:id', async (request, response) => 
-{
-  const listing = await Listing.findById(request.params.id)
-  if (listing)
-    response.json(listing.toJSON())
-  else
-    response.status(404).end()
-})
-
-listingRouter.delete('/:id', async (request, response) => 
+listingRouter.delete('/', async (request, response) => 
 {
   try 
   {
-    const id = request.params.id
+    const id = request.query.id
     const listing = await Listing.findById(id)
     const token = tokenHelper.GetToken(request)
 
