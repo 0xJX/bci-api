@@ -46,7 +46,7 @@ listingRouter.post('/', async (request, response) =>
 
 listingRouter.get('/location/:location', async (request, response) => 
 {
-  const listing = await Listing.find({location: request.params.location}).populate('userReference', ['fullname', 'phonenumber', 'email'])
+  const listing = await Listing.find({location: request.params.location}).populate('user', ['name', 'phonenumber', 'email'])
   if (listing)
     response.json(listing.toJSON())
   else
@@ -54,7 +54,7 @@ listingRouter.get('/location/:location', async (request, response) =>
 })
 
 listingRouter.get('/category/:category', async (request, response) => {
-  const listing = await Listing.find({category: req.params.category}).populate('userReference', ['fullname', 'phonenumber', 'email'])
+  const listing = await Listing.find({category: request.params.category}).populate('user', ['name', 'phonenumber', 'email'])
   if (listing)
     response.json(listing.toJSON())
 else
@@ -62,7 +62,7 @@ else
 })
 
 listingRouter.get('/date/:date', async (request, response) => {
-  const listing = await Listing.find({dateOfPost: {$regex: "[0-9]{4}-[0-9]{2}-[0-9]{2}","$options": "i"} }).populate('userReference', ['fullname', 'phonenumber', 'email'])
+  const listing = await Listing.find({dateOfPost: {$regex: "[0-9]{4}-[0-9]{2}-[0-9]{2}","$options": "i"} }).populate('user', ['name', 'phonenumber', 'email'])
   if (listing)
     response.json(listing.toJSON())
   else
