@@ -6,6 +6,9 @@ chai.use(chaiHttp);
 module.exports = require('../');
 let server = `http://localhost:${process.env.PORT}`
 var storedToken = 'null';
+var storedDate = 'null';
+var listingID = 'null';
+//var storedUserID = 'null';
 
 describe('POST user', () => 
 {
@@ -71,7 +74,7 @@ describe('POST listings', () =>
     let listing = {
       "title": "Test",
       "description": "Test1",
-      "category": "Test2",
+      "category": "Test2CategoryMOCHA",
       "location": "Test3",
       "images": [ "testurl" ],
       "price": 200,
@@ -106,17 +109,115 @@ describe('GET listings', () =>
     });
 });
 
-/*
+
 describe('GET listings by category', () => 
 {
-    it('It should return the listings array.', (done) => 
+    it('It should return the listings array with selected category.', (done) => 
     {
-      chai.request(server).get('/api/listings/category/?category=Test2')
+      chai.request(server).get('/api/listings?category=Test2CategoryMOCHA')
       .end((err, res) => 
       {
         expect(err).to.be.null;
         expect(res).to.have.property('body');
         expect(res.body[0]).to.have.property('user');
+        done();
+      });
+    });
+});
+
+describe('GET listings by location', () => 
+{
+    it('It should return the listings array with selected category.', (done) => 
+    {
+      chai.request(server).get('/api/listings?location=Test3')
+      .end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.have.property('body');
+        expect(res.body[0]).to.have.property('user');
+        expect(res.body[0]).to.have.property('date');
+        storedDate = res.body[0].date;
+        done();
+      });
+    });
+});
+
+describe('GET listings by date', () => 
+{
+    it('It should return the listings array with selected category.', (done) => 
+    {
+      chai.request(server).get('/api/listings?date=' + storedDate)
+      .end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.have.property('body');
+        expect(res.body[0]).to.have.property('user');
+        done();
+      });
+    });
+});
+
+describe('GET listings by category, location and date', () => 
+{
+    it('It should return the listings array with selected category.', (done) => 
+    {
+      chai.request(server).get('/api/listings?category=Test2CategoryMOCHA&location=Test3&date=' + storedDate)
+      .end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.have.property('body');
+        expect(res.body[0]).to.have.property('user');
+        expect(res.body[0]).to.have.property('id');
+        listingID = res.body[0].id;
+        done();
+      });
+    });
+});
+
+describe('GET listings by id', () => 
+{
+    it('It should return the listings array with selected id.', (done) => 
+    {
+      chai.request(server).get('/api/listings?id=' + listingID)
+      .end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.have.property('body');
+        expect(res.body[0]).to.have.property('user');
+        expect(res.body[0]).to.have.property('id');
+        done();
+      });
+    });
+});
+
+describe('DELETE listings by id', () => 
+{
+    it('It should delete the previous tested listing.', (done) => 
+    {
+      chai.request(server).delete('/api/listings?id=' + listingID)
+      .auth(storedToken, { type: 'bearer' })
+      .end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.not.have.status(400);
+        expect(res).to.not.have.status(401);
+        done();
+      });
+    });
+});
+
+/* Gotta find a way to store the user ID.
+describe('DELETE users by id', () => 
+{
+    it('It should delete the previous listings owner.', (done) => 
+    {
+      chai.request(server).delete('/api/users?id=' + storedUserID)
+      .auth(storedToken, { type: 'bearer' })
+      .end((err, res) => 
+      {
+        expect(err).to.be.null;
+        expect(res).to.not.have.status(400);
+        expect(res).to.not.have.status(401);
         done();
       });
     });
