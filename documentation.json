@@ -159,7 +159,7 @@
         }
       },
       "delete": {
-        "summary": "",
+        "summary": "Delete user with id",
         "operationId": "delete-api-users",
         "responses": {
           "200": {
@@ -361,7 +361,7 @@
       },
       "parameters": [],
       "delete": {
-        "summary": "",
+        "summary": "Delete listing with id",
         "operationId": "delete-api-listings",
         "responses": {
           "200": {
