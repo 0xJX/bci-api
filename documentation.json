@@ -12,7 +12,7 @@
     }
   ],
   "paths": {
-    "/api/login/": {
+    "/api/login": {
       "post": {
         "summary": "Login",
         "operationId": "post-api-login",
@@ -56,9 +56,10 @@
             }
           }
         }
-      }
+      },
+      "parameters": []
     },
-    "/api/users/": {
+    "/api/users": {
       "parameters": [],
       "get": {
         "summary": "Get all users",
@@ -184,20 +185,7 @@
         ]
       }
     },
-    "/api/users/{id}": {
-      "parameters": [
-        {
-          "schema": {
-            "type": "string"
-          },
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "description": "User ID"
-        }
-      ]
-    },
-    "/api/listings/": {
+    "/api/listings": {
       "get": {
         "summary": "Get listings",
         "tags": [],
