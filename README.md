@@ -30,7 +30,7 @@ Run the mocha tests with this command:
 
     npm test
 ## Hosted API URL
-    bciapi.herokuapp.com
+    bciapi.herokuapp.com:80
 
 ## Hosted documentation
     https://bciapi.stoplight.io/docs/bci-api/YXBpOjIzMzE3MTA-bci-api-documentation
