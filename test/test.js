@@ -190,6 +190,33 @@ describe('GET listings by id', () =>
     });
 });
 
+/* Not implemented yet.
+describe('POST listings with ID', () => 
+{
+    let listing = {
+      "title": "TestMOD",
+      "description": "TestMOD",
+      "category": "Test2CategoryMOCHA",
+      "location": "Test3",
+      "images": [ "testurl" ],
+      "price": 200,
+      "deliverytype": "shipping",
+    }
+    it('It should try to overwrite existing listing with given id', (done) => 
+    {
+      chai.request(server).post('/api/listings?id=' + listingID)
+      .auth(storedToken, { type: 'bearer' })
+      .send(listing)
+      .end((err, res) => 
+      {
+        expect(storedToken).not.to.be.null;
+        expect(err).to.be.null;
+        expect(res).to.not.have.status(401);
+        done();
+      });
+    });
+});*/
+
 describe('DELETE listings by id', () => 
 {
     it('It should delete the previous tested listing.', (done) => 
@@ -205,20 +232,3 @@ describe('DELETE listings by id', () =>
       });
     });
 });
-
-/* Gotta find a way to store the user ID.
-describe('DELETE users by id', () => 
-{
-    it('It should delete the previous listings owner.', (done) => 
-    {
-      chai.request(server).delete('/api/users?id=' + storedUserID)
-      .auth(storedToken, { type: 'bearer' })
-      .end((err, res) => 
-      {
-        expect(err).to.be.null;
-        expect(res).to.not.have.status(400);
-        expect(res).to.not.have.status(401);
-        done();
-      });
-    });
-});*/

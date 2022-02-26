@@ -59,8 +59,22 @@ listingRouter.post('/', async (request, response) =>
     user: user.id
   })
 
+  const id = request.query.id
+  const existingListing = await Listing.findById(id)
   const savedListing = await listing.save()
-  user.listings = user.listings.concat(savedListing._id)
+
+  if(request.query.id)
+  {
+    if(!existingListing)
+      return response.status(400).json({ error: `No listings found with the id: ${id}`})
+    
+    // TODO: Add modify method here, instead of concatting new listing to old lists; replace existing.
+  }
+  else
+  {
+    user.listings = user.listings.concat(savedListing._id) // Add new listing.
+  }
+
   await user.save()
   response.json(savedListing.toJSON())
 })
